@@ -1,13 +1,31 @@
 // Компонент екрану блокування
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import SocialRecovery from './SocialRecovery';
 
 export default function LockScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showRecovery, setShowRecovery] = useState(false);
   const { unlock } = useApp();
+
+  if (showRecovery) {
+    return (
+      <SocialRecovery
+        onCancel={() => setShowRecovery(false)}
+        onSuccess={async (recoveredPassword) => {
+          try {
+            await unlock(recoveredPassword);
+          } catch (err) {
+            setError('Помилка при відновленні доступу');
+            setShowRecovery(false);
+          }
+        }}
+      />
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,8 +147,16 @@ export default function LockScreen() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>Забули пароль? Відновіть з резервної копії.</p>
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <button
+            onClick={() => setShowRecovery(true)}
+            className="w-full text-sm text-primary-600 hover:text-primary-700 font-medium"
+          >
+            🛡️ Відновити доступ через соціальне відновлення
+          </button>
+          <p className="mt-2 text-center text-xs text-gray-500">
+            Потрібно зібрати частини від довірених осіб
+          </p>
         </div>
       </div>
     </div>

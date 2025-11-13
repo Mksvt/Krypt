@@ -14,6 +14,7 @@
 - 📷 **QR-код сканер** - швидке додавання акаунтів
 - ⚡ **Автоматичне блокування** - захист після неактивності
 - 💾 **Безпечне резервне копіювання** - експорт/імпорт зашифрованих даних
+- 🛡️ **Соціальне відновлення** - розподілена схема Шаміра для відновлення доступу
 - 🎨 **Сучасний UI** - мінімалістичний дизайн з Tailwind CSS
 
 ## 🛠 Технології
@@ -26,6 +27,7 @@
 - **Storage**: IndexedDB
 - **PWA**: vite-plugin-pwa + Workbox
 - **QR Scanner**: html5-qrcode
+- **Social Recovery**: secrets.js-34r7h (Shamir's Secret Sharing)
 
 ## 🚀 Швидкий старт
 
@@ -65,7 +67,9 @@ src/
 │   ├── LockScreen.tsx
 │   ├── MainScreen.tsx
 │   ├── SetupScreen.tsx
-│   └── SettingsModal.tsx
+│   ├── SettingsModal.tsx
+│   ├── SocialRecoverySetup.tsx
+│   └── SocialRecovery.tsx
 ├── context/            # React Context
 │   └── AppContext.tsx
 ├── services/           # Бізнес-логіка
@@ -73,7 +77,8 @@ src/
 │   └── vault.ts
 ├── utils/              # Утиліти
 │   ├── crypto.ts
-│   └── totp.ts
+│   ├── totp.ts
+│   └── shamir.ts
 ├── types/
 │   └── index.ts
 ├── App.tsx
@@ -125,10 +130,10 @@ src/
 - ✅ Автоматичне блокування
 - ✅ PWA з офлайн-режимом
 - ✅ Експорт/імпорт резервних копій
+- ✅ Соціальне відновлення (Схема Шаміра)
 
 ## 🚧 Майбутні функції (Post-MVP)
 
-- [ ] Соціальне відновлення (Схема Шаміра)
 - [ ] Синхронізація між пристроями
 - [ ] WebAuthn/Passkeys
 - [ ] Біометрична автентифікація

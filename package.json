@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/qrcode": "^1.5.6",
     "html5-qrcode": "^2.3.8",
     "otpauth": "^9.4.1",
+    "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "secrets.js-34r7h": "^2.0.2",
     "vite-plugin-pwa": "^1.1.0",
     "workbox-window": "^7.3.0"
   },

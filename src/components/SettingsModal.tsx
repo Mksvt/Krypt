@@ -2,18 +2,32 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { exportVault, importVault } from '../services/vault';
+import SocialRecoverySetup from './SocialRecoverySetup';
 
 interface SettingsModalProps {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: SettingsModalProps) {
-  const [activeTab, setActiveTab] = useState<'backup' | 'about'>('backup');
+  const [activeTab, setActiveTab] = useState<'backup' | 'social' | 'about'>('backup');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showSocialSetup, setShowSocialSetup] = useState(false);
   const { currentPassword, accounts } = useApp();
+
+  if (showSocialSetup) {
+    return (
+      <SocialRecoverySetup
+        onClose={() => setShowSocialSetup(false)}
+        onComplete={() => {
+          setShowSocialSetup(false);
+          setSuccess('Соціальне відновлення налаштовано!');
+        }}
+      />
+    );
+  }
 
   const handleExport = async () => {
     setError('');
@@ -111,6 +125,16 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
             }`}
           >
             Резервне копіювання
+          </button>
+          <button
+            onClick={() => setActiveTab('social')}
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+              activeTab === 'social'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Соціальне відновлення
           </button>
           <button
             onClick={() => setActiveTab('about')}
@@ -260,6 +284,113 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
           </div>
         )}
 
+        {activeTab === 'social' && (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 mb-2">
+                🔐 Що таке соціальне відновлення?
+              </h3>
+              <p className="text-sm text-blue-800">
+                Схема Шаміра дозволяє розділити ваш майстер-пароль на кілька частин
+                та довірити їх різним людям. Для відновлення доступу потрібна тільки
+                частина цих частин (наприклад, 3 з 5).
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-3">Переваги:</h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Відновлення доступу навіть якщо ви забули пароль</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Розподілена довіра між кількома особами</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Жодна особа не може відновити доступ самостійно</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Захист від втрати доступу при форс-мажорі</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-3">Як це працює:</h3>
+              <ol className="space-y-3 text-sm text-gray-700">
+                <li className="flex">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                    1
+                  </span>
+                  <span>Ви обираєте схему (наприклад, 3 з 5 частин)</span>
+                </li>
+                <li className="flex">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                    2
+                  </span>
+                  <span>Система генерує 5 частин вашого пароля</span>
+                </li>
+                <li className="flex">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                    3
+                  </span>
+                  <span>Ви роздаєте частини 5 довіреним особам</span>
+                </li>
+                <li className="flex">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                    4
+                  </span>
+                  <span>Для відновлення потрібно зібрати будь-які 3 частини</span>
+                </li>
+              </ol>
+            </div>
+
+            <button
+              onClick={() => setShowSocialSetup(true)}
+              className="w-full btn-primary"
+            >
+              🛡️ Налаштувати соціальне відновлення
+            </button>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex">
+                <svg
+                  className="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <div className="text-sm text-yellow-800">
+                  <p className="font-semibold mb-1">Порада:</p>
+                  <p>
+                    Обирайте довірених осіб ретельно. Це мають бути люди, яким ви довіряєте,
+                    але які не знають один одного.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'about' && (
           <div className="space-y-6">
             <div className="text-center py-8">
@@ -281,7 +412,7 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 Децентралізований Автентифікатор
               </h3>
-              <p className="text-gray-600 mb-1">Версія 1.0.0 MVP</p>
+              <p className="text-gray-600 mb-1">Версія 1.1.0</p>
             </div>
 
             <div className="border-t border-gray-200 pt-6 space-y-4">
@@ -359,6 +490,20 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                       />
                     </svg>
                     Безпечне резервне копіювання
+                  </li>
+                  <li className="flex items-start">
+                    <svg
+                      className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Соціальне відновлення (Схема Шаміра)
                   </li>
                 </ul>
               </div>
