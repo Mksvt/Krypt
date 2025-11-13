@@ -20,14 +20,17 @@ export default function SocialRecoverySetup({
   onComplete,
 }: SocialRecoverySetupProps) {
   const { currentPassword } = useApp();
-  const [step, setStep] = useState<'config' | 'generate' | 'distribute'>('config');
+  const [step, setStep] = useState<'config' | 'generate' | 'distribute'>(
+    'config'
+  );
   const [totalShares, setTotalShares] = useState(5);
   const [threshold, setThreshold] = useState(3);
   const [shares, setShares] = useState<ShamirShare[]>([]);
   const [holderNames, setHolderNames] = useState<string[]>([]);
   const [verificationHash, setVerificationHash] = useState('');
   const [loading, setLoading] = useState(false);
-  const [selectedPreset, setSelectedPreset] = useState<keyof typeof RECOMMENDATIONS>('3-of-5');
+  const [selectedPreset, setSelectedPreset] =
+    useState<keyof typeof RECOMMENDATIONS>('3-of-5');
 
   const handlePresetSelect = (preset: keyof typeof RECOMMENDATIONS) => {
     setSelectedPreset(preset);
@@ -73,7 +76,10 @@ export default function SocialRecoverySetup({
   };
 
   const downloadShare = async (share: ShamirShare, index: number) => {
-    const text = exportShareAsText(share, share.holderName || `Особа ${index + 1}`);
+    const text = exportShareAsText(
+      share,
+      share.holderName || `Особа ${index + 1}`
+    );
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -87,7 +93,7 @@ export default function SocialRecoverySetup({
     try {
       const qrData = generateShareQRData(share);
       const qrImage = await QRCode.toDataURL(qrData);
-      
+
       const a = document.createElement('a');
       a.href = qrImage;
       a.download = `dauth-recovery-qr-${index + 1}.png`;
@@ -135,8 +141,18 @@ ${verificationHash}
             onClick={onClose}
             className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -144,18 +160,24 @@ ${verificationHash}
         {step === 'config' && (
           <div className="space-y-6">
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-900 mb-2">Що таке Схема Шаміра?</h3>
+              <h3 className="font-semibold text-blue-900 mb-2">
+                Що таке Схема Шаміра?
+              </h3>
               <p className="text-sm text-blue-800">
-                Схема Шаміра дозволяє розділити ваш майстер-пароль на кілька частин та
-                довірити їх різним людям. Для відновлення доступу потрібна тільки частина
-                цих частин (наприклад, 3 з 5).
+                Схема Шаміра дозволяє розділити ваш майстер-пароль на кілька
+                частин та довірити їх різним людям. Для відновлення доступу
+                потрібна тільки частина цих частин (наприклад, 3 з 5).
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold mb-3">Виберіть схему:</h3>
               <div className="space-y-2">
-                {(Object.keys(RECOMMENDATIONS) as Array<keyof typeof RECOMMENDATIONS>).map((key) => (
+                {(
+                  Object.keys(RECOMMENDATIONS) as Array<
+                    keyof typeof RECOMMENDATIONS
+                  >
+                ).map((key) => (
                   <button
                     key={key}
                     onClick={() => handlePresetSelect(key)}
@@ -168,7 +190,8 @@ ${verificationHash}
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold text-gray-900">{key}</span>
                       <span className="text-sm text-gray-600">
-                        {RECOMMENDATIONS[key].threshold} з {RECOMMENDATIONS[key].totalShares}
+                        {RECOMMENDATIONS[key].threshold} з{' '}
+                        {RECOMMENDATIONS[key].totalShares}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -201,8 +224,9 @@ ${verificationHash}
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <p className="text-sm text-yellow-800">
-                <strong>Важливо:</strong> Обирайте довірених осіб ретельно.
-                Вони зможуть відновити ваш доступ, зібравшись разом ({threshold} осіб).
+                <strong>Важливо:</strong> Обирайте довірених осіб ретельно. Вони
+                зможуть відновити ваш доступ, зібравшись разом ({threshold}{' '}
+                осіб).
               </p>
             </div>
 
@@ -225,7 +249,8 @@ ${verificationHash}
           <div className="space-y-6">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <p className="text-sm text-green-800">
-                ✅ Частини успішно згенеровано! Тепер роздайте їх довіреним особам.
+                ✅ Частини успішно згенеровано! Тепер роздайте їх довіреним
+                особам.
               </p>
             </div>
 
@@ -242,7 +267,10 @@ ${verificationHash}
 
               <div className="space-y-3">
                 {shares.map((share, index) => (
-                  <div key={share.id} className="border border-gray-200 rounded-lg p-4">
+                  <div
+                    key={share.id}
+                    className="border border-gray-200 rounded-lg p-4"
+                  >
                     <div className="flex items-center justify-between mb-3">
                       <div>
                         <p className="font-medium text-gray-900">
@@ -277,7 +305,9 @@ ${verificationHash}
             </div>
 
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h4 className="font-semibold text-red-900 mb-2">⚠️ Важливі правила безпеки:</h4>
+              <h4 className="font-semibold text-red-900 mb-2">
+                ⚠️ Важливі правила безпеки:
+              </h4>
               <ul className="text-sm text-red-800 space-y-1">
                 <li>• Не відправляйте частини електронною поштою</li>
                 <li>• Роздайте їх особисто або через захищені канали</li>

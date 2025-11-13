@@ -9,7 +9,9 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ onClose }: SettingsModalProps) {
-  const [activeTab, setActiveTab] = useState<'backup' | 'social' | 'about'>('backup');
+  const [activeTab, setActiveTab] = useState<'backup' | 'social' | 'about'>(
+    'backup'
+  );
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -291,9 +293,9 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                 🔐 Що таке соціальне відновлення?
               </h3>
               <p className="text-sm text-blue-800">
-                Схема Шаміра дозволяє розділити ваш майстер-пароль на кілька частин
-                та довірити їх різним людям. Для відновлення доступу потрібна тільки
-                частина цих частин (наприклад, 3 з 5).
+                Схема Шаміра дозволяє розділити ваш майстер-пароль на кілька
+                частин та довірити їх різним людям. Для відновлення доступу
+                потрібна тільки частина цих частин (наприклад, 3 з 5).
               </p>
             </div>
 
@@ -301,26 +303,58 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
               <h3 className="font-semibold mb-3">Переваги:</h3>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start">
-                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span>Відновлення доступу навіть якщо ви забули пароль</span>
                 </li>
                 <li className="flex items-start">
-                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span>Розподілена довіра між кількома особами</span>
                 </li>
                 <li className="flex items-start">
-                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span>Жодна особа не може відновити доступ самостійно</span>
                 </li>
                 <li className="flex items-start">
-                  <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span>Захист від втрати доступу при форс-мажорі</span>
                 </li>
@@ -352,7 +386,9 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                   <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
                     4
                   </span>
-                  <span>Для відновлення потрібно зібрати будь-які 3 частини</span>
+                  <span>
+                    Для відновлення потрібно зібрати будь-які 3 частини
+                  </span>
                 </li>
               </ol>
             </div>
@@ -382,8 +418,8 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                 <div className="text-sm text-yellow-800">
                   <p className="font-semibold mb-1">Порада:</p>
                   <p>
-                    Обирайте довірених осіб ретельно. Це мають бути люди, яким ви довіряєте,
-                    але які не знають один одного.
+                    Обирайте довірених осіб ретельно. Це мають бути люди, яким
+                    ви довіряєте, але які не знають один одного.
                   </p>
                 </div>
               </div>

@@ -31,7 +31,9 @@ export function createShamirShares(
 ): ShamirShare[] {
   // Валідація
   if (threshold > totalShares) {
-    throw new Error('Threshold не може бути більшим за загальну кількість частин');
+    throw new Error(
+      'Threshold не може бути більшим за загальну кількість частин'
+    );
   }
 
   if (threshold < 2) {
@@ -255,7 +257,7 @@ export function parseShareFromText(text: string): string | null {
  */
 export const RECOMMENDATIONS = {
   '3-of-5': {
-    description: 'Балансований варіант для сім\'ї/друзів',
+    description: "Балансований варіант для сім'ї/друзів",
     totalShares: 5,
     threshold: 3,
     suggestion: [
@@ -281,8 +283,8 @@ export const RECOMMENDATIONS = {
     totalShares: 7,
     threshold: 4,
     suggestion: [
-      'Член сім\'ї #1',
-      'Член сім\'ї #2',
+      "Член сім'ї #1",
+      "Член сім'ї #2",
       'Близький друг #1',
       'Близький друг #2',
       'Юрист/Нотаріус',

@@ -149,9 +149,7 @@ export default function SocialRecovery({
       // Успіх!
       onSuccess(recoveredPassword);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : 'Помилка відновлення'
-      );
+      setError(err instanceof Error ? err.message : 'Помилка відновлення');
     } finally {
       setLoading(false);
     }
@@ -172,15 +170,26 @@ export default function SocialRecovery({
             onClick={onCancel}
             className="p-2 text-gray-400 hover:text-gray-600 rounded-lg"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <p className="text-sm text-blue-800">
-            Зберіть необхідну кількість частин від довірених осіб для відновлення доступу.
+            Зберіть необхідну кількість частин від довірених осіб для
+            відновлення доступу.
           </p>
         </div>
 
@@ -203,7 +212,9 @@ export default function SocialRecovery({
                 canRecover ? 'bg-green-500' : 'bg-primary-500'
               }`}
               style={{
-                width: `${threshold > 0 ? (shares.length / threshold) * 100 : 0}%`,
+                width: `${
+                  threshold > 0 ? (shares.length / threshold) * 100 : 0
+                }%`,
               }}
             />
           </div>
@@ -278,8 +289,14 @@ export default function SocialRecovery({
                 </button>
               ) : (
                 <div>
-                  <div id="recovery-qr-reader" className="rounded-lg overflow-hidden mb-2"></div>
-                  <button onClick={stopQRScanner} className="w-full btn-secondary">
+                  <div
+                    id="recovery-qr-reader"
+                    className="rounded-lg overflow-hidden mb-2"
+                  ></div>
+                  <button
+                    onClick={stopQRScanner}
+                    className="w-full btn-secondary"
+                  >
                     Зупинити
                   </button>
                 </div>
@@ -338,8 +355,18 @@ export default function SocialRecovery({
                     onClick={() => removeShare(index)}
                     className="ml-2 p-1 text-red-600 hover:bg-red-50 rounded"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
