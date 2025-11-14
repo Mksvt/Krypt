@@ -9,6 +9,7 @@ lerna-debug.log*
 DEPLOYMENT.md
 MVP_COMPLETE.md
 SOCIAL_RECOVERY_COMPLETE.md
+BIOMETRIC.md
 node_modules
 dist
 dist-ssr

@@ -1,23 +1,105 @@
 // Компонент налаштувань та резервного копіювання
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { exportVault, importVault } from '../services/vault';
 import SocialRecoverySetup from './SocialRecoverySetup';
+import {
+  isBiometricSupported,
+  isBiometricAvailable,
+  registerBiometric,
+  getBiometricTypeName,
+} from '../utils/biometric';
+import {
+  saveBiometricCredential,
+  deleteBiometricCredential,
+  isBiometricConfigured,
+} from '../services/storage';
 
 interface SettingsModalProps {
   onClose: () => void;
 }
 
 export default function SettingsModal({ onClose }: SettingsModalProps) {
-  const [activeTab, setActiveTab] = useState<'backup' | 'social' | 'about'>(
-    'backup'
-  );
+  const [activeTab, setActiveTab] = useState<
+    'backup' | 'social' | 'biometric' | 'about'
+  >('backup');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [showSocialSetup, setShowSocialSetup] = useState(false);
+  const [biometricSupported, setBiometricSupported] = useState(false);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [biometricEnabled, setBiometricEnabled] = useState(false);
+  const [biometricTypeName, setBiometricTypeName] = useState('');
   const { currentPassword, accounts } = useApp();
+
+  useEffect(() => {
+    // Перевірка підтримки біометрії
+    const checkBiometric = async () => {
+      const supported = isBiometricSupported();
+      setBiometricSupported(supported);
+
+      if (supported) {
+        const available = await isBiometricAvailable();
+        setBiometricAvailable(available);
+
+        if (available) {
+          const enabled = await isBiometricConfigured();
+          setBiometricEnabled(enabled);
+          setBiometricTypeName(getBiometricTypeName());
+        }
+      }
+    };
+
+    checkBiometric();
+  }, []);
+
+  const handleEnableBiometric = async () => {
+    if (!currentPassword) {
+      setError('Необхідна автентифікація');
+      return;
+    }
+
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      // Реєстрація біометричної автентифікації
+      const credential = await registerBiometric('dauth-user');
+
+      // Зберігаємо credential та зашифрований пароль
+      await saveBiometricCredential(credential);
+
+      setBiometricEnabled(true);
+      setSuccess('Біометричну автентифікацію успішно налаштовано!');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Помилка при налаштуванні біометрії');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDisableBiometric = async () => {
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      await deleteBiometricCredential();
+      setBiometricEnabled(false);
+      setSuccess('Біометричну автентифікацію вимкнено');
+    } catch (err) {
+      setError('Помилка при вимкненні біометрії');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (showSocialSetup) {
     return (
@@ -130,17 +212,27 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
           </button>
           <button
             onClick={() => setActiveTab('social')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-3 rounded-md font-medium transition-colors text-sm ${
               activeTab === 'social'
                 ? 'bg-white text-gray-900 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            Соціальне відновлення
+            Соціальне
+          </button>
+          <button
+            onClick={() => setActiveTab('biometric')}
+            className={`flex-1 py-2 px-3 rounded-md font-medium transition-colors text-sm ${
+              activeTab === 'biometric'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Біометрія
           </button>
           <button
             onClick={() => setActiveTab('about')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-3 rounded-md font-medium transition-colors text-sm ${
               activeTab === 'about'
                 ? 'bg-white text-gray-900 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
@@ -424,6 +516,169 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'biometric' && (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 mb-2">
+                🔐 Біометрична автентифікація
+              </h3>
+              <p className="text-sm text-blue-800">
+                Розблокуйте застосунок швидко та безпечно використовуючи {biometricTypeName || 'біометричну автентифікацію'}.
+                Ваш майстер-пароль залишається зашифрованим на пристрої.
+              </p>
+            </div>
+
+            {!biometricSupported && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800">
+                  <strong>Не підтримується:</strong> Ваш браузер не підтримує WebAuthn API.
+                  Спробуйте оновити браузер або використовуйте Chrome, Safari або Edge.
+                </p>
+              </div>
+            )}
+
+            {biometricSupported && !biometricAvailable && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>Недоступно:</strong> На цьому пристрої немає біометричних датчиків
+                  або вони не налаштовані. Перевірте налаштування системи.
+                </p>
+              </div>
+            )}
+
+            {biometricSupported && biometricAvailable && (
+              <>
+                <div className="border border-gray-200 rounded-lg p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-purple-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Статус біометрії
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {biometricEnabled
+                          ? `✅ Біометричну автентифікацію увімкнено. Ви можете розблокувати застосунок за допомогою ${biometricTypeName}.`
+                          : `Налаштуйте ${biometricTypeName} для швидкого розблокування застосунку.`}
+                      </p>
+                      {!biometricEnabled ? (
+                        <button
+                          onClick={handleEnableBiometric}
+                          disabled={loading}
+                          className="btn-primary disabled:opacity-50"
+                        >
+                          {loading ? 'Налаштування...' : '🔒 Увімкнути біометрію'}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleDisableBiometric}
+                          disabled={loading}
+                          className="btn-secondary disabled:opacity-50"
+                        >
+                          {loading ? 'Вимкнення...' : 'Вимкнути біометрію'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-3">Як це працює:</h3>
+                  <ol className="space-y-3 text-sm text-gray-700">
+                    <li className="flex">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                        1
+                      </span>
+                      <span>Натисніть "Увімкнути біометрію" вище</span>
+                    </li>
+                    <li className="flex">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                        2
+                      </span>
+                      <span>Підтвердьте використовуючи {biometricTypeName}</span>
+                    </li>
+                    <li className="flex">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
+                        3
+                      </span>
+                      <span>Тепер ви можете розблокувати застосунок біометрією</span>
+                    </li>
+                  </ol>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-3">Переваги:</h3>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-start">
+                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span>Швидке розблокування без введення пароля</span>
+                    </li>
+                    <li className="flex items-start">
+                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span>Додатковий рівень безпеки</span>
+                    </li>
+                    <li className="flex items-start">
+                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span>Захист від підглядання (shoulder surfing)</span>
+                    </li>
+                    <li className="flex items-start">
+                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span>Пароль залишається зашифрованим на пристрої</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex">
+                    <svg
+                      className="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    <div className="text-sm text-yellow-800">
+                      <p className="font-semibold mb-1">Важливо:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Ви все ще можете розблокувати за допомогою майстер-пароля</li>
+                        <li>Біометрія працює тільки на цьому пристрої</li>
+                        <li>При видаленні даних браузера потрібно налаштувати заново</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         )}
 

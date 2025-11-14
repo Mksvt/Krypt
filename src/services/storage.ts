@@ -1,10 +1,12 @@
 // Сервіс для роботи з IndexedDB
 import type { EncryptedVault, StorageData } from '../types';
+import type { BiometricCredential } from '../utils/biometric';
 
 const DB_NAME = 'DecentralizedAuthDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'vault';
 const STORAGE_KEY = 'vault_data';
+const BIOMETRIC_KEY = 'biometric_credential';
 
 /**
  * Ініціалізує базу даних IndexedDB
@@ -159,4 +161,94 @@ export async function getLastAccess(): Promise<number | null> {
       db.close();
     };
   });
+}
+
+/**
+ * Зберігає біометричні credentials
+ */
+export async function saveBiometricCredential(
+  credential: BiometricCredential
+): Promise<void> {
+  const db = await initDB();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.put(credential, BIOMETRIC_KEY);
+
+    request.onsuccess = () => {
+      resolve();
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to save biometric credential'));
+    };
+
+    transaction.oncomplete = () => {
+      db.close();
+    };
+  });
+}
+
+/**
+ * Завантажує біометричні credentials
+ */
+export async function loadBiometricCredential(): Promise<BiometricCredential | null> {
+  const db = await initDB();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(BIOMETRIC_KEY);
+
+    request.onsuccess = () => {
+      const credential = request.result as BiometricCredential | undefined;
+      resolve(credential || null);
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to load biometric credential'));
+    };
+
+    transaction.oncomplete = () => {
+      db.close();
+    };
+  });
+}
+
+/**
+ * Видаляє біометричні credentials
+ */
+export async function deleteBiometricCredential(): Promise<void> {
+  const db = await initDB();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.delete(BIOMETRIC_KEY);
+
+    request.onsuccess = () => {
+      resolve();
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to delete biometric credential'));
+    };
+
+    transaction.oncomplete = () => {
+      db.close();
+    };
+  });
+}
+
+/**
+ * Перевіряє, чи налаштована біометрична автентифікація
+ */
+export async function isBiometricConfigured(): Promise<boolean> {
+  try {
+    const credential = await loadBiometricCredential();
+    return credential !== null;
+  } catch {
+    return false;
+  }
 }
