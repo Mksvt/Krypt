@@ -227,10 +227,7 @@ export const getBiometricTypeName = (): string => {
     return 'Touch ID / Face ID';
   } else if (platform.includes('win')) {
     return 'Windows Hello';
-  } else if (
-    platform.includes('android') ||
-    userAgent.includes('android')
-  ) {
+  } else if (platform.includes('android') || userAgent.includes('android')) {
     return 'Fingerprint / Face Unlock';
   } else if (platform.includes('iphone') || platform.includes('ipad')) {
     return 'Touch ID / Face ID';

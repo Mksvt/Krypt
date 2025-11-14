@@ -526,16 +526,18 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                 🔐 Біометрична автентифікація
               </h3>
               <p className="text-sm text-blue-800">
-                Розблокуйте застосунок швидко та безпечно використовуючи {biometricTypeName || 'біометричну автентифікацію'}.
-                Ваш майстер-пароль залишається зашифрованим на пристрої.
+                Розблокуйте застосунок швидко та безпечно використовуючи{' '}
+                {biometricTypeName || 'біометричну автентифікацію'}. Ваш
+                майстер-пароль залишається зашифрованим на пристрої.
               </p>
             </div>
 
             {!biometricSupported && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                 <p className="text-sm text-red-800">
-                  <strong>Не підтримується:</strong> Ваш браузер не підтримує WebAuthn API.
-                  Спробуйте оновити браузер або використовуйте Chrome, Safari або Edge.
+                  <strong>Не підтримується:</strong> Ваш браузер не підтримує
+                  WebAuthn API. Спробуйте оновити браузер або використовуйте
+                  Chrome, Safari або Edge.
                 </p>
               </div>
             )}
@@ -543,8 +545,9 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
             {biometricSupported && !biometricAvailable && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-sm text-yellow-800">
-                  <strong>Недоступно:</strong> На цьому пристрої немає біометричних датчиків
-                  або вони не налаштовані. Перевірте налаштування системи.
+                  <strong>Недоступно:</strong> На цьому пристрої немає
+                  біометричних датчиків або вони не налаштовані. Перевірте
+                  налаштування системи.
                 </p>
               </div>
             )}
@@ -583,7 +586,9 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                           disabled={loading}
                           className="btn-primary disabled:opacity-50"
                         >
-                          {loading ? 'Налаштування...' : '🔒 Увімкнути біометрію'}
+                          {loading
+                            ? 'Налаштування...'
+                            : '🔒 Увімкнути біометрію'}
                         </button>
                       ) : (
                         <button
@@ -611,13 +616,17 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                       <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
                         2
                       </span>
-                      <span>Підтвердьте використовуючи {biometricTypeName}</span>
+                      <span>
+                        Підтвердьте використовуючи {biometricTypeName}
+                      </span>
                     </li>
                     <li className="flex">
                       <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center mr-3 text-xs font-bold">
                         3
                       </span>
-                      <span>Тепер ви можете розблокувати застосунок біометрією</span>
+                      <span>
+                        Тепер ви можете розблокувати застосунок біометрією
+                      </span>
                     </li>
                   </ol>
                 </div>
@@ -626,26 +635,58 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                   <h3 className="font-semibold mb-3">Переваги:</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-start">
-                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span>Швидке розблокування без введення пароля</span>
                     </li>
                     <li className="flex items-start">
-                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span>Додатковий рівень безпеки</span>
                     </li>
                     <li className="flex items-start">
-                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span>Захист від підглядання (shoulder surfing)</span>
                     </li>
                     <li className="flex items-start">
-                      <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span>Пароль залишається зашифрованим на пристрої</span>
                     </li>
@@ -670,9 +711,15 @@ export default function SettingsModal({ onClose }: SettingsModalProps) {
                     <div className="text-sm text-yellow-800">
                       <p className="font-semibold mb-1">Важливо:</p>
                       <ul className="list-disc list-inside space-y-1">
-                        <li>Ви все ще можете розблокувати за допомогою майстер-пароля</li>
+                        <li>
+                          Ви все ще можете розблокувати за допомогою
+                          майстер-пароля
+                        </li>
                         <li>Біометрія працює тільки на цьому пристрої</li>
-                        <li>При видаленні даних браузера потрібно налаштувати заново</li>
+                        <li>
+                          При видаленні даних браузера потрібно налаштувати
+                          заново
+                        </li>
                       </ul>
                     </div>
                   </div>
