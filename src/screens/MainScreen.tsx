@@ -1,9 +1,8 @@
 // Головний екран застосунку
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import AccountCard from './AccountCard';
-import AddAccountModal from './AddAccountModal';
-import SettingsModal from './SettingsModal';
+import { AccountCard, AddAccountModal } from '../components/features/account';
+import SettingsModal from '../components/SettingsModal';
 
 export default function MainScreen() {
   const { accounts, removeAccount, lock } = useApp();

@@ -62,29 +62,51 @@ npm run preview
 
 ```
 src/
-├── components/          # React компоненти
-│   ├── AccountCard.tsx
-│   ├── AddAccountModal.tsx
-│   ├── LockScreen.tsx
+├── screens/            # 🎯 Повноекранні views
 │   ├── MainScreen.tsx
-│   ├── SetupScreen.tsx
-│   ├── SettingsModal.tsx
-│   ├── SocialRecoverySetup.tsx
-│   └── SocialRecovery.tsx
-├── context/            # React Context
+│   ├── LockScreen.tsx
+│   └── SetupScreen.tsx
+├── components/
+│   ├── common/         # 🧩 Атомарні UI компоненти
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   ├── Modal.tsx
+│   │   ├── Alert.tsx
+│   │   └── Tabs.tsx
+│   ├── features/       # 🎨 Feature-based модулі
+│   │   ├── account/    # TOTP management
+│   │   │   ├── AccountCard.tsx
+│   │   │   └── AddAccountModal.tsx
+│   │   └── recovery/   # Social recovery
+│   │       ├── SocialRecoverySetup.tsx
+│   │       └── SocialRecovery.tsx
+│   └── settings/       # ⚙️ Settings tabs
+│       ├── SettingsModal.tsx
+│       ├── BackupTab.tsx
+│       ├── BiometricTab.tsx
+│       ├── SocialTab.tsx
+│       └── AboutTab.tsx
+├── hooks/              # 🪝 Custom React hooks
+│   ├── useBiometric.ts
+│   ├── useBackup.ts
+│   └── useTOTP.ts
+├── context/            # 🌐 Global state
 │   └── AppContext.tsx
-├── services/           # Бізнес-логіка
+├── services/           # 🔧 Core services
 │   ├── storage.ts
 │   └── vault.ts
-├── utils/              # Утиліти
+├── utils/              # 🛠️ Pure utilities
 │   ├── crypto.ts
 │   ├── totp.ts
+│   ├── biometric.ts
 │   └── shamir.ts
 ├── types/
 │   └── index.ts
 ├── App.tsx
 └── main.tsx
 ```
+
+> 📖 Детальна документація: [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | [ARCHITECTURE_MAP.md](ARCHITECTURE_MAP.md)
 
 ## 🔒 Безпека
 

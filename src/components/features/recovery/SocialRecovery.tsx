@@ -7,8 +7,8 @@ import {
   parseShareFromText,
   verifySecret,
   type ShamirShare,
-} from '../utils/shamir';
-import { verifyPassword } from '../services/vault';
+} from '../../../utils/shamir';
+import { verifyPassword } from '../../../services/vault';
 
 interface SocialRecoveryProps {
   onSuccess: (password: string) => void;

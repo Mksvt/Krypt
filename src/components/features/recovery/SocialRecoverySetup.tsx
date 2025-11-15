@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp } from '../../../context/AppContext';
 import {
   createShamirShares,
   exportShareAsText,
@@ -7,7 +7,7 @@ import {
   createVerificationHash,
   RECOMMENDATIONS,
   type ShamirShare,
-} from '../utils/shamir';
+} from '../../../utils/shamir';
 import QRCode from 'qrcode';
 
 interface SocialRecoverySetupProps {

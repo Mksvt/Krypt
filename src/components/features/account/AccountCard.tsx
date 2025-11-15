@@ -1,11 +1,11 @@
 // Компонент для відображення одного TOTP-коду
 import { useState, useEffect } from 'react';
-import type { Account } from '../types';
+import type { Account } from '../../../types';
 import {
   generateTOTP,
   getTimeRemaining,
   getTimerProgress,
-} from '../utils/totp';
+} from '../../../utils/totp';
 
 interface AccountCardProps {
   account: Account;

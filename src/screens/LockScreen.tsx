@@ -1,8 +1,8 @@
 // Компонент екрану блокування
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import SocialRecovery from './SocialRecovery';
-import { Button, Alert } from './common';
+import { SocialRecovery } from '../components/features/recovery';
+import { Button, Alert } from '../components/common';
 import { useBiometric } from '../hooks';
 
 export default function LockScreen() {

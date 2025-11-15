@@ -1,7 +1,5 @@
 import { useApp } from './context/AppContext';
-import SetupScreen from './components/SetupScreen';
-import LockScreen from './components/LockScreen';
-import MainScreen from './components/MainScreen';
+import { SetupScreen, LockScreen, MainScreen } from './screens';
 
 function App() {
   const { isInitialized, isLocked, initialize } = useApp();

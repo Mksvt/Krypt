@@ -1,8 +1,12 @@
 // Компонент для додавання нового акаунту
 import { useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { parseOtpauthUri, validateSecret, formatSecret } from '../utils/totp';
-import { useApp } from '../context/AppContext';
+import {
+  parseOtpauthUri,
+  validateSecret,
+  formatSecret,
+} from '../../../utils/totp';
+import { useApp } from '../../../context/AppContext';
 
 interface AddAccountModalProps {
   onClose: () => void;
